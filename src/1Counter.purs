@@ -17,9 +17,9 @@ update Decrement = count -~ 1
 counter = with $ \st h ->
   let clicked a = const $ runHandler h $ st # update a
   in ui $ H.div_ $ mconcat
-  [ H.button [ H.onClick $ clicked $ Decrement ] $ text "-"
+  [ H.button [ H.onClick $ clicked Decrement ] $ text "-"
   , text $ show st.count
-  , H.button [ H.onClick $ clicked $ Increment ] $ text "+"
+  , H.button [ H.onClick $ clicked Increment ] $ text "+"
   ]
 
 main = animate { count : 0 } $ counter
