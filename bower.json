@@ -1,0 +1,10 @@
+{
+  "name": "todo",
+  "private": true,
+  "dependencies": {
+    "purescript-optic-ui": "*"
+  },
+  "resolutions": {
+    "purescript-transformers": "^0.6.1"
+  }
+}
