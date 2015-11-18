@@ -21,7 +21,6 @@ update :: Action -> Counter -> Counter
 update Increment = count +~ 1
 update Decrement = count -~ 1
 
---counter d :: () forall eff. UI (dom :: DOM | eff) Markup Counter Counter
 counterR d = with $ \st h ->
   let clicked a = const $ runHandler h $ st # update a
   in ui $ H.div_ $ mconcat
