@@ -21,16 +21,23 @@ update :: Action -> Counter -> Counter
 update Increment = count +~ 1
 update Decrement = count -~ 1
 
-counterR d = with $ \st h ->
+counter = with $ \st h ->
   let clicked a = const $ runHandler h $ st # update a
-  in ui $ H.div_ $ mconcat
+  in ui $ H.span [] $ mconcat
   [ H.button [ H.onClick $ clicked Decrement ] $ text "-"
   , text $ show st.count
   , H.button [ H.onClick $ clicked Increment ] $ text "+"
-  , H.button [ H.onClick $ d ] $ text "X"
   ]
 
 -- new stuff
+
+removable component callback = flip withView component $ \componentUI ->
+  H.div_ $ mconcat
+  [ componentUI
+  , H.button [ H.onClick callback ] $ text "X"
+  ]
+
+--
 
 type CounterLR = { counters :: List Counter }
 
@@ -44,7 +51,7 @@ main = animate { counters : Nil } $ with \st h ->
   let handleLR a = const $ runHandler h $ st # updateLR a
   in mconcat
   [ ui $ H.button [ H.onClick $ handleLR Insert ] $ text "Add"
-  , counters $ foreach (\i -> counterR <<< handleLR $ Remove i)
+  , counters $ foreach (\i -> removable counter <<< handleLR $ Remove i)
   ]
 
 count    = lens _.count    (_ { count    = _ })
