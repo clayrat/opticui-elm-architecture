@@ -1,4 +1,4 @@
-module Five where
+module Six where
 --------------------------------------------------------------------------------
 import Prelude
 import Control.Monad.Aff
@@ -35,10 +35,19 @@ viewer = with \st h -> let
   , H.button [ H.onClick $ submit st.topic ] $ text "More Please!"
   ]
 
-main = animate { topic: "funny cats", gifUrl: "" } $ viewer
+-- new stuff
 
-topic  = lens _.topic  (_ { topic  = _ })
+type Viewer2 = { leftV :: Viewer, rightV :: Viewer }
+
+main = animate { leftV: { topic: "funny cats", gifUrl: "" }, rightV: { topic: "funny dogs", gifUrl: "" } } $
+  withView (H.div [ H.styleA "display: flex;" ]) $ mconcat
+  [ leftV  $ viewer
+  , rightV $ viewer
+  ]
+
 gifUrl = lens _.gifUrl (_ { gifUrl = _ })
+leftV  = lens _.leftV  (_ { leftV  = _ })
+rightV = lens _.rightV (_ { rightV = _ })
 
 _JObject = prism' JS.JObject $ \x -> case x of
   JS.JObject y -> Just y
