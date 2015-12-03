@@ -9,6 +9,7 @@ import OpticUI.Markup.HTML as H
 --------------------------------------------------------------------------------
 
 type Counter = { count :: Int }
+count = lens _.count (_ { count = _ })
 
 data Action = Increment | Decrement
 
@@ -26,5 +27,3 @@ counter = with $ \st h ->
   ]
 
 main = animate { count : 0 } $ counter
-
-count = lens _.count (_ { count = _ })

@@ -9,6 +9,7 @@ import OpticUI.Markup.HTML as H
 --------------------------------------------------------------------------------
 
 type Counter = { count :: Int }
+count  = lens _.count  (_ { count  = _ })
 
 init x = { count : x }
 
@@ -30,6 +31,8 @@ counter = with $ \st h ->
 -- new stuff
 
 type Counter2 = { top :: Counter, bottom :: Counter}
+top    = lens _.top    (_ { top    = _ })
+bottom = lens _.bottom (_ { bottom = _ })
 
 init2 a b = { top : init a, bottom : init b }
 
@@ -47,7 +50,3 @@ main = animate (init2 0 0) $ with \st h ->
   , bottom $ counter
   , ui $ H.button [ H.onClick $ clicked2 Reset ] $ text "RESET"
   ]
-
-count  = lens _.count  (_ { count  = _ })
-top    = lens _.top    (_ { top    = _ })
-bottom = lens _.bottom (_ { bottom = _ })

@@ -11,6 +11,7 @@ import OpticUI.Markup.HTML as H
 --------------------------------------------------------------------------------
 
 type Counter = { count :: Int }
+count = lens _.count (_ { count = _ })
 
 init :: Int -> Counter
 init x = { count : x }
@@ -40,6 +41,7 @@ removable component callback = flip withView component $ \componentUI ->
 --
 
 type CounterLR = { counters :: List Counter }
+counters = lens _.counters (_ { counters = _ })
 
 data ActionLR = Insert | Remove Int
 
@@ -53,6 +55,3 @@ main = animate { counters : Nil } $ with \st h ->
   [ ui $ H.button [ H.onClick $ handleLR Insert ] $ text "Add"
   , counters $ foreach (\i -> removable counter <<< handleLR $ Remove i)
   ]
-
-count    = lens _.count    (_ { count    = _ })
-counters = lens _.counters (_ { counters = _ })
