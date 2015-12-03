@@ -1,10 +1,11 @@
-module Five where
+module Seven where
 --------------------------------------------------------------------------------
 import Prelude
 import Control.Monad.Aff (runAff)
 import Data.Foldable (mconcat)
 import Data.Lens
 import Data.Lens.Index (ix)
+import Data.List hiding (init)
 import Data.Maybe
 import Data.Monoid
 
@@ -12,6 +13,7 @@ import DOM (DOM ())
 import Data.JSON as JS
 import Network.HTTP.Affjax as AJ
 import OpticUI
+import OpticUI.Components
 import OpticUI.Markup.HTML as H
 --------------------------------------------------------------------------------
 
@@ -57,4 +59,18 @@ viewer = with \st h -> let
   , H.button [ H.onClick $ const more ] $ text "More Please!"
   ]
 
-main = animate (init "funny cats") viewer
+ -- new stuff
+
+type ViewerL = { input :: String, viewers :: List GifViewer }
+viewers = lens _.viewers (_ { viewers = _ })
+input =   lens _.input   (_ { input   = _ })
+
+main = animate { input : "", viewers : Nil } $ with $ \s h -> let
+    addOnEnter ev (Just t)  = if (ev.keyCode == 13) then
+                                runHandler h $ s # (viewers %~ ((flip snoc) $ init t)) <<< (input .~ "")
+                              else pure unit
+    addOnEnter _   Nothing  = pure unit
+  in mconcat
+  [ input $ textField [H.onKeydown addOnEnter]
+  , withView (H.div [ H.styleA "display: flex;" ]) (viewers $ foreach $ const viewer)
+  ]

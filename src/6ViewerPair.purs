@@ -26,6 +26,9 @@ type GifViewer = { topic :: String, gifUrl :: String }
 topic  = lens _.topic  (_ { topic  = _ })
 gifUrl = lens _.gifUrl (_ { gifUrl = _ })
 
+init :: String -> GifViewer
+init t = { topic : t , gifUrl : "" }
+
 randomGiphy :: String -> String
 randomGiphy t = mconcat
   [ "https://api.giphy.com/v1/gifs/random"
@@ -61,8 +64,8 @@ leftV  = lens _.leftV  (_ { leftV  = _ })
 rightV = lens _.rightV (_ { rightV = _ })
 
 main = let
- cats = { topic : "funny cats", gifUrl : "" }
- dogs = { topic : "funny dogs", gifUrl : "" } in
+ cats = init "funny cats"
+ dogs = init "funny dogs" in
  animate { leftV: cats , rightV: dogs } $
   withView (H.div [ H.styleA "display: flex;" ]) $ mconcat
   [ leftV  $ viewer
